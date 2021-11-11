@@ -12,10 +12,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Event.belongsTo(models.User, { // means Event have a mediaId
+      Event.belongsTo(models.User, { // means Event have a userId
         targetKey: 'id',
         foreignKey: 'userId',
-        as: 'consents'
       })
 
     }

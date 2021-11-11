@@ -10,6 +10,6 @@ router.post('/login', userService.logInUser);
 
 router.post('/signup', userService.signUpUser);
 
-router.get('/service', userService.getServiceReport);
+router.get('/:email/events', userService.getEventHistory);
 
 module.exports = router;

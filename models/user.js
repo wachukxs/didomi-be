@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     // this has only data present in the ongoing operation (like insert, delete, update, or select)
     
     /**
-     * User attributes without password, and pushSubscriptionStringified
+     * User attributes without password,
      * impl idea from https://stackoverflow.com/a/66956107/9259701
      * @returns array of attributes without password
      */
@@ -32,9 +32,10 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       
-      User.hasMany(models.Event, { // if you want a unique name for when you do User.findOne({}) etc, put an `as` attrribute here
-        foreignKey: 'userId', // should we use statecode or id ? what if they update their statecode ? we'd mass update it
-        sourceKey: 'id'
+      User.hasMany(models.Event, {
+        foreignKey: 'userId',
+        sourceKey: 'id',
+        as: 'consents'
       });
 
     }

@@ -12,7 +12,7 @@ module.exports = {
             })
             .catch((err) => {
                 console.error('There was an error creating a user', err)
-                
+
                 res.status(400).send(err)
             })
     },
@@ -22,14 +22,14 @@ module.exports = {
 
         db.User.findOne({
             where: {
-                email: req.body.email
+                email: req.body.email.toLowerCase()
             }
         })
             .then((user) => {
 
                 if (user && user.dataValues.password === req.body.password) {
                     console.log('logging in user', user);
-                    res.json({...user})
+                    res.json({ ...user })
                 } else if (user) {
                     console.log('failed logging in user', user);
                     res.sendStatus(403) // Forbidden, we know you, but wrong password
@@ -37,17 +37,53 @@ module.exports = {
                     console.log('failed logging in user', user);
                     res.sendStatus(401) // Unauthorized, we don't know you
                 }
-                
+
             })
             .catch((err) => {
                 console.error('There was an error creating a user', err)
-                
+
                 res.status(400).send(err)
             })
     },
 
-    async getServiceReport(req, res) {
+    async getEventHistory(req, res) {
+        try {
+            // check if it's actually an email
+            const emailRegEx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g
 
-        res.json({ message: 'We done' })
+            if (emailRegEx.test(req.params.email)) {
+                db.User.findOne({
+                    where: {
+                        email: req.params.email.toLowerCase()
+                    },
+                    attributes: { exclude: ['password'] },
+                    include: [{
+                        model: db.Event,
+                        as: 'consents',
+                        attributes: { exclude: ['userId'] }
+                    }],
+                }).then((user) => {
+
+                    if (user) {
+                        console.log('fetched events for user');
+                        res.json(user)
+                    } else {
+                        console.log('failed to fetch events for user', user);
+                        res.sendStatus(422)
+                    }
+    
+                })
+                .catch((err) => {
+                    console.error('There was an error fetching events', err)
+    
+                    res.sendStatus(400)
+                })
+            } else {
+                res.sendStatus(422)
+            }
+        } catch (error) {
+            res.sendStatus(500)
+        }
+
     }
 }

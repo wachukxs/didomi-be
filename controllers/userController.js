@@ -12,4 +12,6 @@ router.post('/signup', userService.signUpUser);
 
 router.get('/:email/events', userService.getEventHistory);
 
+router.delete('/:email', userService.deleteUser);
+
 module.exports = router;

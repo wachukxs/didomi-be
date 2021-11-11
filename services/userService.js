@@ -23,13 +23,18 @@ module.exports = {
         db.User.findOne({
             where: {
                 email: req.body.email.toLowerCase()
-            }
-        })
-            .then((user) => {
+            },
+            // attributes: { exclude: ['password'] },
+            include: [{
+                model: db.Event,
+                as: 'consents',
+                attributes: { exclude: ['userId'] } // will include userEmail
+            }],
+        }).then((user) => {
 
                 if (user && user.dataValues.password === req.body.password) {
                     console.log('logging in user', user);
-                    res.json({ ...user })
+                    res.json(user)
                 } else if (user) {
                     console.log('failed logging in user', user);
                     res.sendStatus(403) // Forbidden, we know you, but wrong password
@@ -60,7 +65,7 @@ module.exports = {
                     include: [{
                         model: db.Event,
                         as: 'consents',
-                        attributes: { exclude: ['userId'] }
+                        attributes: { exclude: ['userId'] } // will include userEmail
                     }],
                 }).then((user) => {
 
@@ -71,13 +76,13 @@ module.exports = {
                         console.log('failed to fetch events for user', user);
                         res.sendStatus(422)
                     }
-    
+
                 })
-                .catch((err) => {
-                    console.error('There was an error fetching events', err)
-    
-                    res.sendStatus(400)
-                })
+                    .catch((err) => {
+                        console.error('There was an error fetching events', err)
+
+                        res.sendStatus(400)
+                    })
             } else {
                 res.sendStatus(422)
             }
@@ -85,5 +90,32 @@ module.exports = {
             res.sendStatus(500)
         }
 
+    },
+
+    async deleteUser(req, res) {
+        // should be an email, and should already exist ... what happens if we try to delete an entry that didn't exist ?
+        // you can't delete an entry if you aren't authenticated
+
+        console.log('deleting', req.params.email);
+        db.User.destroy({
+            where: {
+              email: req.params.email
+            }
+          }).then((user) => {
+            console.log('deletedddd', user);
+            if (user) { // means the user exists, and we deleted them
+                res.sendStatus(200)
+            } else {
+                res.sendStatus(422)
+            }
+
+        })
+        .catch((err) => {
+            console.error('There was an error deleting user', err)
+
+            res.sendStatus(400)
+        })
+
+        
     }
 }

@@ -10,7 +10,7 @@ app.use(express.json());
 let userRoutes = require('../controllers/userController')
 let eventRoutes = require('../controllers/eventController')
 
-app.use('/api/v1/user', userRoutes)
-app.use('/api/v1/event', eventRoutes)
+app.use('/api/v1/users', userRoutes)
+app.use('/api/v1/events', eventRoutes)
 
 module.exports = app

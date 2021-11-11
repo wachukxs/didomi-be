@@ -5,6 +5,6 @@ const eventService = require('./../services/eventService')
 
 // can import auth services as middle for routes
 
-router.post('/new', eventService.newNotificationEvent);
+router.post('/', eventService.newNotificationEvent);
 
 module.exports = router;

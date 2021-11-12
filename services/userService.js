@@ -104,7 +104,7 @@ module.exports = {
           }).then((user) => {
             console.log('deletedddd', user);
             if (user) { // means the user exists, and we deleted them
-                res.sendStatus(200)
+                res.json({message: "Account successfuly deleted"})
             } else {
                 res.sendStatus(422)
             }

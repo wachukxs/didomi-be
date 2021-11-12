@@ -58,3 +58,8 @@ https://stackoverflow.com/a/39442849/9259701
 | col 3 is      | some wordy text | $1600 |
 | col 2 is      | centered        |   $12 |
 | zebra stripes | are neat        |    $1 |
+
+
+###
+to cascade delete for events, when user is deleted
+all successful response must be json

@@ -33,7 +33,7 @@ module.exports = {
         }).then((user) => {
 
                 if (user && user.dataValues.password === req.body.password) {
-                    console.log('logging in user', user);
+                    console.log('logging in user');
                     res.json(user)
                 } else if (user) {
                     console.log('failed logging in user', user);

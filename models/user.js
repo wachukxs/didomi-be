@@ -66,10 +66,19 @@ module.exports = (sequelize, DataTypes) => {
       comment: 'So we know how long they have been with us.'
     },
 
-    password: DataTypes.STRING,
+    password: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
 
-    firstname: DataTypes.STRING,
-    lastname: DataTypes.STRING,
+    firstname: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    lastname: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
 
     // maybe have a session insight field of all the corp members's search histroy, liked items, (find how to figure out items they're intrested in)
   }, {

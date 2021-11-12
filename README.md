@@ -63,3 +63,19 @@ https://stackoverflow.com/a/39442849/9259701
 ###
 to cascade delete for events, when user is deleted
 all successful response must be json
+
+
+{
+    "id": "sms_notifications",
+    "enabled": true
+}
+
+doesn't have a time stamp, getting the order of creation might become cumbersome when the list starts to grow
+
+it's better to capture the whole notification state of the user, than each individual state, over time.
+
+
+what this means is that instead of storing each individual event email_notifications, or sms_notifications.
+we can store the state of both event together. this way, we can query for the whole state at any point in time, and other services can aptly use the whole notifcation state (or even a single or subset), and make notification perference update more wholistically.
+
+i also changed the id type to be unique, so each event can be uniquely identified, has the whole notifcation perference state, and a time stamp

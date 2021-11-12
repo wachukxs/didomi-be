@@ -1,5 +1,5 @@
 const db = require('../models')
-
+const jwt = require('jsonwebtoken')
 
 module.exports = {
     async signUpUser(req, res) {
@@ -24,7 +24,7 @@ module.exports = {
             where: {
                 email: req.body.email.toLowerCase()
             },
-            // attributes: { exclude: ['password'] },
+            attributes: { exclude: ['password'] }, // comment if we'll check passwords
             include: [{
                 model: db.Event,
                 as: 'consents',
@@ -32,15 +32,23 @@ module.exports = {
             }],
         }).then((user) => {
 
-                if (user && user.dataValues.password === req.body.password) {
-                    console.log('logging in user');
+                // if (user && user.dataValues.password === req.body.password) {
+                //     console.log('logging in user');
+                //     res.json(user)
+                // } else if (user) {
+                //     console.log('failed logging in user', user);
+                //     res.sendStatus(403) // Forbidden, we know you, but wrong password
+                // } else {
+                //     console.log('failed logging in user', user);
+                //     res.sendStatus(401) // Unauthorized, we don't know you
+                // }
+
+                if (user) {
+                    console.log('logging in user', user);
                     res.json(user)
-                } else if (user) {
-                    console.log('failed logging in user', user);
-                    res.sendStatus(403) // Forbidden, we know you, but wrong password
                 } else {
                     console.log('failed logging in user', user);
-                    res.sendStatus(401) // Unauthorized, we don't know you
+                    res.sendStatus(422)
                 }
 
             })

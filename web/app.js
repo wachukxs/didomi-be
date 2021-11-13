@@ -4,12 +4,14 @@ const app = express();
 const session = require('express-session');
 const Knex = require('knex');
 const morgan = require('morgan');
+var cookieParser = require('cookie-parser')
 const KnexSessionStore = require('connect-session-knex')(session);
 const dotenv = require('dotenv');
 dotenv.config();
 // set before using routes
 app.use(cors())
 app.use(express.json());
+app.use(cookieParser())
 
 // session store
 const knex = Knex({
@@ -60,5 +62,8 @@ let eventRoutes = require('../controllers/eventController')
 
 app.use('/api/v1/users', userRoutes)
 app.use('/api/v1/events', eventRoutes)
+app.use('/hello', (req, res) => {
+    res.send('Hi!') // mini health check
+})
 
 module.exports = app

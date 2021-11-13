@@ -2,7 +2,7 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Events', {
-      id: {
+      sn: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -28,12 +28,12 @@ module.exports = {
           key: 'email'
         },
       },
-      emailNotifications: {
+      enabled: {
         type: Sequelize.BOOLEAN,
         default: false
       },
-      smsNotifications: {
-        type: Sequelize.BOOLEAN,
+      id: {
+        type: Sequelize.STRING,
         default: false
       },
       createdAt: {

@@ -21,34 +21,42 @@ module.exports = {
     async signUpUser(req, res) {
         console.log('req.body in signUpUser', req.body);
 
-        db.User.create(req.body)
-            .then((user) => {
-                console.log('created new user');
+        try {
+            db.User.create(req.body)
+                .then((user) => {
+                    console.log('created new user');
 
-                // send welcome email
-                jwt.sign({
-                    email: req.body.email.toLowerCase()
-                }, process.env.SESSION_SECRET, (err, token) => {
-                    if (err) {
-                        console.error('sign up err', err)
-                        res.sendStatus(400)
-                    } else {
-                        console.log('\n\n\n\nsigned up ...done jwt and', req.session);
-                        // res.setHeader('Set-Cookie', 'name=value')
+                    // send welcome email
+                    jwt.sign({
+                        email: req.body.email.toLowerCase()
+                    }, process.env.SESSION_SECRET, (err, token) => {
+                        if (err) {
+                            console.error('sign up err', err)
+                            res.sendStatus(400)
+                        } else {
+                            console.log('\n\n\n\nsigned up ...done jwt and', req.session);
+                            
+                            // req.session.user = user.dataValues
+                            res.cookie('_didomi_fe', token, cookieOptions)
 
-                        // problem here https://stackoverflow.com/questions/49476080/express-session-not-persistent-after-redirect
-
-                        req.session.user = user.dataValues
-                        res.cookie('_didomi_fe', token, cookieOptions)
-                        res.json(user)
-                    }
+                            console.log('we\'re moving sing up', req.session);
+                            res.json(user)
+                        }
+                    })
                 })
-            })
-            .catch((err) => {
-                console.error('There was an error creating a user', err)
-                let {errors, fields} = err
-                res.status(400).send({errors, fields})
-            })
+                .catch((err) => {
+                    console.error('There was an error creating a user', err)
+                    let { errors, fields } = err
+                    if (errors[0].validatorKey == 'is_null' && errors[0].path == 'email') {
+                        res.sendStatus(422)
+                    } else {
+                        res.status(400).send({ errors, fields })
+                    }
+                    
+                })
+        } catch (error) {
+            res.status(400)
+        }
     },
 
     async logInUser(req, res) {
@@ -80,18 +88,17 @@ module.exports = {
             if (user) {
                 console.log('logging in user', user.dataValues.email);
 
-                
+
                 jwt.sign({
                     email: user.dataValues.email
                 }, process.env.SESSION_SECRET, (err, token) => {
                     if (err) {
                         res.sendStatus(400)
                     } else {
-                        // res.setHeader('Set-Cookie', 'name=value')
-                        req.session.user = user.dataValues
+                        // req.session.user = user.dataValues
                         res.cookie('_didomi_fe', token, cookieOptions)
-                        console.log('we\'re moving', req.session);
-                        /* req.session.save(function(err) { // hate this
+                        console.log('we\'re moving login', req.session);
+                        /* req.session.save(function(err) { // maybe do this before every server restart
                           console.log("saved session");
                         }) */
                         res.json(user)
@@ -180,5 +187,24 @@ module.exports = {
             })
 
 
+    },
+
+    async logOutUser(req, res) {
+        try {
+            req.session.destroy(function (err) {
+                if (err) {
+                    req.sendStatus(400)
+                } else {
+                    // cannot access session here
+                    console.log('session destroyed');
+                    res.cookie('_didomi_fe', '', { // clear the JWT value
+                        maxAge: 1 // remove the JWT ASAP
+                    })
+                    res.json({ message: 'Bye.' });
+                }
+            });
+        } catch (error) {
+
+        }
     }
 }

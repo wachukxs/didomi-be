@@ -10,6 +10,8 @@ const auth = require('../utils/auth')
 // will re-name routes
 router.post('/login', userService.logInUser);
 
+router.get('/logout', userService.logOutUser);
+
 router.post('/signup', userService.signUpUser);
 
 router.get('/:email/events', auth.verifyJWT, userService.getEventHistory);

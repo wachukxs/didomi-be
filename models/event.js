@@ -16,13 +16,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Event.init({
-    id: {
+    sn: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-
     age: {
       type: DataTypes.VIRTUAL,
       get() {
@@ -33,11 +32,14 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
 
-    emailNotifications: {
-      type: DataTypes.BOOLEAN,
-      default: false
+    id: {
+      type: DataTypes.STRING,
+      default: false,
+      validate: {
+        isIn: [['email_notifications', 'sms_notifications']]
+      }
     },
-    smsNotifications: {
+    enabled: {
       type: DataTypes.BOOLEAN,
       default: false
     },

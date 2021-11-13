@@ -30,7 +30,7 @@ const knexSessionStore = new KnexSessionStore({
 })
 
 let expressSessionOptions = {
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || 'fd(&^%---)12@)782"ewiow', // 
     resave: false,
     saveUninitialized: false,
     store: knexSessionStore,

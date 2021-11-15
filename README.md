@@ -1,4 +1,4 @@
-# Set up instructions
+## Set up instructions
 1. Set updata base
     * Run `npx sequelize-cli db:migrate`
 2. Install dependencies
@@ -33,4 +33,5 @@ npx sequelize-cli db:migrate:undo
 | `/hello` | GET | Health check :) |
 
 
-## P.S.
+## Testing
+I will do a run through of the test I did on Postman during the code review.

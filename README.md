@@ -34,7 +34,3 @@ npx sequelize-cli db:migrate:undo
 
 
 ## P.S.
-to cascade delete for events, when user is deleted
-all successful response must be json
-
-

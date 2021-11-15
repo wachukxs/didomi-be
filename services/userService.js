@@ -45,7 +45,7 @@ module.exports = {
                     })
                 })
                 .catch((err) => {
-                    console.error('There was an error creating a user', err)
+                    console.error('There was an error creating/signing up a user', err)
                     let { errors, fields } = err
                     if (errors[0].validatorKey == 'is_null' && errors[0].path == 'email') {
                         res.sendStatus(422)
@@ -111,7 +111,7 @@ module.exports = {
             }
 
         }).catch((err) => {
-            console.error('There was an error creating a user', err)
+            console.error('There was an error logging in a user', err)
 
             res.status(400).send(err)
         })

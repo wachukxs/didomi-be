@@ -18,6 +18,9 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 module.exports = {
+    /***
+     * Since I'm collecting password, I ideally would hash it before saving.
+     */
     async signUpUser(req, res) {
         console.log('req.body in signUpUser', req.body);
 

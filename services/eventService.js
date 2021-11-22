@@ -3,8 +3,12 @@ const db = require('../models')
 
 module.exports = {
     async newNotificationEvent(req, res) {
+
+        
         try {
             console.log('req.session.user', req.session);
+
+            // 
 
         db.Event.create({
             ...req.body.perference

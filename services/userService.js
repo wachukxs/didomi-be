@@ -32,7 +32,7 @@ module.exports = {
                     // send welcome email
                     jwt.sign({
                         email: req.body.email.toLowerCase()
-                    }, process.env.SESSION_SECRET || 'fd(&^%---)12@)782"ewiow', (err, token) => {
+                    }, process.env.SESSION_SECRET, (err, token) => {
                         if (err) {
                             console.error('sign up err', err)
                             res.sendStatus(400)
@@ -94,7 +94,7 @@ module.exports = {
 
                 jwt.sign({
                     email: user.dataValues.email
-                }, process.env.SESSION_SECRET || 'fd(&^%---)12@)782"ewiow', (err, token) => {
+                }, process.env.SESSION_SECRET, (err, token) => {
                     if (err) {
                         res.sendStatus(400)
                     } else {

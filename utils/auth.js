@@ -11,7 +11,7 @@ module.exports.verifyJWT = (req, res, next) => {
             // console.log('\n\n req.session.corper is', req.session);
             
             // we could also use req.cookies, but req.signedCookies is just an extra layer of security
-            jwt.verify(req.cookies._didomi_fe, process.env.SESSION_SECRET || 'fd(&^%---)12@)782"ewiow', function(err, decodedToken) {
+            jwt.verify(req.cookies._didomi_fe, process.env.SESSION_SECRET , function(err, decodedToken) {
                 if (err) {
                     console.error(err);
                     res.sendStatus(400)
